@@ -9,11 +9,13 @@ const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require("mongoose-findorcreate");
+const cors = require("cors");
 
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
+app.use(cors());
 
 app.use(session({
   secret: process.env.SECRET,
@@ -52,7 +54,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/handy",
+    callbackURL: "http://localhost:5000/auth/google/handy",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -131,6 +133,6 @@ app.post("/login", function(req, res) {
   });
 });
 
-app.listen(3000, function(){
+app.listen(5000, function(){
   console.log("Server running on port 3000");
 });
